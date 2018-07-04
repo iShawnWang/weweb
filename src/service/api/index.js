@@ -951,7 +951,7 @@ var apiObj = {
     params.success && params.success({ authSetting: { "scope.userInfo": true } })
   },
   getUserInfo: function (params) {
-    let apiHost = localStorage.getItem('apiHost') || 'https://www.uat.sxl.cn'
+    let apiHost = localStorage.getItem('apiHost') || 'https://www.sxl.cn'
     let teamMemberId = localStorage.getItem('teamMemberId')
     let siteId = localStorage.getItem('siteId')
     if(!teamMemberId || !siteId){
