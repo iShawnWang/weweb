@@ -544,14 +544,19 @@ var apiObj = {
     }else{
       separator = '&'
     }
-    let teamMemberId = wx.getStorageSync('teamMemberId')
+    let teamMemberId = wx.getStorageSync('teamMemberUuid')
+    let code = wx.getStorageSync('loginCode')
     const blackList = ['st_analytics/apps_list'] // 针对这个请求 : /s/work_wechat/st_analytics/apps_list, H5不再微信公众号里面, 才拼接 `h5TeamMemberId` 参数
     const isBlackRequet = blackList.some(blackUrl => {
       return originalUrl.indexOf(blackList) !== -1
     })
+    let codeParam = ''
+    if(originalUrl.indexOf('?code') === -1 && originalUrl.indexOf('&code') === -1){
+      codeParam = `${separator}code=${code}`
+    }
     if(teamMemberId && !isBlackRequet){
-      let h5TeamMemberIdParam = `${separator}h5TeamMemberId=${teamMemberId}`
-      return originalUrl.concat(h5TeamMemberIdParam)
+      let h5TeamMemberIdParam = `${separator}teamMemberUuid=${teamMemberId}`
+      return originalUrl.concat(h5TeamMemberIdParam).concat(codeParam)
     }else{
       return originalUrl
     }
@@ -939,7 +944,7 @@ var apiObj = {
     // wx.login() polyfill
     // H5 请求使用 teamMemberId 鉴权, code 没啥用
     // 所以后端 Api 要支持 code 和 teamMemberId 的鉴权方式
-    let loginCode = localStorage.getItem('loginCode')
+    let loginCode = wx.getStorageSync('loginCode')
     if(!loginCode){
       console.error('SXL : should set `loginCode` in localStorage to mock login success ~')
     }
